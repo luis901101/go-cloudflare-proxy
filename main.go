@@ -3,11 +3,13 @@ package main
 import (
 	"cloudflare-proxy/conf"
 	"cloudflare-proxy/controller"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 )
 
+var version = "0.0.1+1"
 var db = make(map[string]string)
 
 func setupEngine() *gin.Engine {
@@ -80,10 +82,12 @@ func setupEngine() *gin.Engine {
 }
 
 func main() {
+	fmt.Printf("Server running version: %s\n", version)
 	engine := setupEngine()
 	// Listen and Server in 0.0.0.0:8080
 	err := engine.Run(":8080")
 	if err != nil {
 		log.Fatalf("Failed to start server: %e", err)
+		return
 	}
 }
