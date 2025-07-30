@@ -1,51 +1,37 @@
 package main
 
 import (
-	"cloudflare-proxy/dto"
-	"cloudflare-proxy/utils"
+	"cloudflare-proxy/conf"
+	"cloudflare-proxy/controller"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
-	"time"
 )
 
 var db = make(map[string]string)
 
-func setupRouter() *gin.Engine {
+func setupEngine() *gin.Engine {
+	config := conf.Load()
+
 	// Disable Console Color
 	// gin.DisableConsoleColor()
-	r := gin.Default()
+	engine := gin.Default()
+
+	// Initialize controller
+	imageController := controller.NewImageController(config)
+	streamController := controller.NewStreamController(config)
+
+	// Register controller routes
+	imageController.RegisterRoutes(engine)
+	streamController.RegisterRoutes(engine)
 
 	// Ping test
-	r.GET("/ping", func(c *gin.Context) {
+	engine.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "pong")
 	})
 
-	// Ping test
-	r.GET("/image", func(c *gin.Context) {
-		c.JSON(http.StatusOK, dto.ImageResponseDTO{
-			Success: utils.BoolPtr(true),
-			Result: &dto.ImageDTO{
-				ID:       utils.StringPtr("12345"),
-				Filename: utils.StringPtr("image.png"),
-				Variants: &[]string{"thumbnail", "best"},
-				Metadata: &map[string]interface{}{"asd": "value"},
-				Uploaded: utils.TimeToUTCTimePtr(time.Now()),
-			},
-		})
-	})
-
-	r.GET("/stream", func(c *gin.Context) {
-		c.JSON(http.StatusOK, dto.StreamResponseDTO{
-			Success: utils.BoolPtr(true),
-			Result: &dto.StreamDTO{
-				Uid:     utils.StringPtr("asd-qwe-zxc"),
-				Created: utils.TimeToUTCTimePtr(time.Now()),
-			},
-		})
-	})
-
 	// Get user value
-	r.GET("/user/:name", func(c *gin.Context) {
+	engine.GET("/user/:name", func(c *gin.Context) {
 		user := c.Params.ByName("name")
 		value, ok := db[user]
 		if ok {
@@ -57,12 +43,12 @@ func setupRouter() *gin.Engine {
 
 	// Authorized group (uses gin.BasicAuth() middleware)
 	// Same than:
-	// authorized := r.Group("/")
+	// authorized := engine.Group("/")
 	// authorized.Use(gin.BasicAuth(gin.Credentials{
 	//	  "foo":  "bar",
 	//	  "manu": "123",
 	//}))
-	authorized := r.Group("/", gin.BasicAuth(gin.Accounts{
+	authorized := engine.Group("/", gin.BasicAuth(gin.Accounts{
 		"foo":  "bar", // user:foo password:bar
 		"manu": "123", // user:manu password:123
 	}))
@@ -90,11 +76,14 @@ func setupRouter() *gin.Engine {
 		}
 	})
 
-	return r
+	return engine
 }
 
 func main() {
-	r := setupRouter()
+	engine := setupEngine()
 	// Listen and Server in 0.0.0.0:8080
-	r.Run(":8080")
+	err := engine.Run(":8080")
+	if err != nil {
+		log.Fatalf("Failed to start server: %e", err)
+	}
 }

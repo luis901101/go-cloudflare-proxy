@@ -1,7 +1,7 @@
 ######################
 # IntelliJ
 ######################
-.idea/
+.idea/*
 *.iml
 *.iws
 *.ipr
@@ -27,7 +27,7 @@ out/
 # Windows image file caches
 Thumbs.db
 
-# Folder config file
+# Folder conf file
 Desktop.ini
 
 ######################
