@@ -4,7 +4,6 @@ import (
 	"cloudflare-proxy/conf"
 	"cloudflare-proxy/dto"
 	"cloudflare-proxy/handler"
-	"encoding/json"
 	"fmt"
 	"net/http"
 )
@@ -31,18 +30,5 @@ func (service ImageService) GetImage(id string) (result dto.ImageResponseDTO, st
 		return result, status, err
 	}
 
-	// Handle request
-	response, status, err := handler.HandleRequest(service.client, request)
-	if status != http.StatusOK || err != nil {
-		return result, status, err
-	}
-	//goland:noinspection ALL
-	defer response.Body.Close()
-
-	// Decode JSON body
-	if err := json.NewDecoder(response.Body).Decode(&result); err != nil {
-		return result, http.StatusInternalServerError, fmt.Errorf("failed to decode result: %w", err)
-	}
-
-	return result, http.StatusOK, nil
+	return handler.HandleRequestWithResult[dto.ImageResponseDTO](service.client, request)
 }

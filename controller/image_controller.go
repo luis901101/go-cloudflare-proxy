@@ -22,8 +22,8 @@ func NewImageController(config conf.Config) ImageController {
 }
 
 // RegisterRoutes registers all image-related routes
-func (controller *ImageController) RegisterRoutes(r *gin.Engine) {
-	r.GET("/image/:id", controller.GetImage)
+func (controller *ImageController) RegisterRoutes(engine *gin.Engine) {
+	engine.GET("/image/:id", controller.GetImage)
 }
 
 // GetImage handles GET /image endpoint
