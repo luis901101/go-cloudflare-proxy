@@ -9,6 +9,7 @@ import (
 type Config struct {
 	Account     string  `env:"ACCOUNT,required"`
 	Token       string  `env:"TOKEN,required"`
+	ApiKey      string  `env:"API_KEY,required"`
 	WatermarkId *string `env:"WATERMARK_ID"`
 }
 

@@ -2,7 +2,6 @@ package service
 
 import (
 	"cloudflare-proxy/conf"
-	"cloudflare-proxy/dto"
 	"cloudflare-proxy/handler"
 	"fmt"
 	"net/http"
@@ -20,7 +19,7 @@ func NewImageService(config conf.Config) ImageService {
 }
 
 // GetImage handles GET image by id from Cloudflare
-func (service ImageService) GetImage(id string) (result dto.ImageResponseDTO, status int, err error) {
+func (service ImageService) GetImage(id string) (result *any /*result *dto.ImageResponseDTO*/, status int, err error) {
 	// Build the URL using config methods
 	url := fmt.Sprintf("%s/%s", service.config.ImageUrl(), id)
 
@@ -30,5 +29,5 @@ func (service ImageService) GetImage(id string) (result dto.ImageResponseDTO, st
 		return result, status, err
 	}
 
-	return handler.HandleRequestWithResult[dto.ImageResponseDTO](service.client, request)
+	return handler.HandleRequestWithResult[any /*dto.ImageResponseDTO*/](service.client, request)
 }

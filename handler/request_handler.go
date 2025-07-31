@@ -40,7 +40,7 @@ func HandleRequestWithResponse(client *http.Client, request *http.Request) (*htt
 
 // HandleRequestWithResult handles the HTTP request and decodes the JSON response into the provided result type.
 // It returns the result, status code, and error if any.
-func HandleRequestWithResult[T any](client *http.Client, request *http.Request) (result T, status int, err error) {
+func HandleRequestWithResult[T any](client *http.Client, request *http.Request) (result *T, status int, err error) {
 	// Handle request
 	response, status, err := HandleRequestWithResponse(client, request)
 	//goland:noinspection ALL
@@ -54,7 +54,7 @@ func HandleRequestWithResult[T any](client *http.Client, request *http.Request) 
 
 	// Decode JSON body
 	if errDecoding != nil {
-		return result, http.StatusInternalServerError, fmt.Errorf("failed to decode result: %w", err)
+		return result, http.StatusInternalServerError, fmt.Errorf("failed to decode result: %w", errDecoding)
 	}
 
 	return result, http.StatusOK, nil

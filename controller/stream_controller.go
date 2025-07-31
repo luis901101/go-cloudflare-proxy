@@ -20,8 +20,8 @@ func NewStreamController(config conf.Config) StreamController {
 }
 
 // RegisterRoutes registers all stream-related routes
-func (controller *StreamController) RegisterRoutes(engine *gin.Engine) {
-	engine.GET("/stream", controller.GetStream)
+func (controller *StreamController) RegisterRoutes(router *gin.RouterGroup) {
+	router.GET("/stream", controller.GetStream)
 }
 
 // GetStream handles GET /stream endpoint

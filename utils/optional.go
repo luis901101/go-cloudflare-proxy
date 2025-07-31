@@ -1,7 +1,7 @@
 package utils
 
 func NullCheck(value ...any) *any {
-	if value != nil {
+	if len(value) > 0 {
 		for _, v := range value {
 			if v != nil {
 				return &v
@@ -10,10 +10,3 @@ func NullCheck(value ...any) *any {
 	}
 	return nil
 }
-
-//func NullCheck2[T any](value T, other T) *T {
-//	if value == nil {
-//		return &other
-//	}
-//	return &value
-//}
