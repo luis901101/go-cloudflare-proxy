@@ -36,7 +36,7 @@ func setupEngine() *gin.Engine {
 	//	c.String(http.StatusOK, "pong")
 	//})
 	//
-	//// Get user value
+	//// get user value
 	//engine.GET("/user/:name", func(c *gin.Context) {
 	//	user := c.Params.ByName("name")
 	//	value, ok := db[user]

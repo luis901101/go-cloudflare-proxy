@@ -12,7 +12,7 @@ import (
 // Middleware creates gin middleware for authorization.
 func Middleware(config conf.Config) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// 1. Get the Authorization header.
+		// 1. get the Authorization header.
 		authHeader := c.GetHeader(utils.HeaderApiKey)
 		if authHeader == "" {
 			// Stop processing and send an error response.

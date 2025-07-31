@@ -25,7 +25,7 @@ func (config Config) ImageUrl() string {
 	return config.BaseUrl() + "/images/v1"
 }
 
-func (config Config) VideoUrl() string {
+func (config Config) StreamUrl() string {
 	return config.BaseUrl() + "/stream"
 }
 
@@ -33,11 +33,11 @@ func (config Config) DirectUploadImageUrl() string {
 	return config.BaseUrl() + "/images/v2/direct_upload"
 }
 
-func (config Config) DirectUploadVideoUrl() string {
+func (config Config) DirectUploadStreamUrl() string {
 	return config.BaseUrl() + "/stream/direct_upload"
 }
 
-func (config Config) DirectUploadTusVideoUrl() string {
+func (config Config) DirectUploadTusStreamUrl() string {
 	return config.BaseUrl() + "/stream?direct_user=true"
 }
 
